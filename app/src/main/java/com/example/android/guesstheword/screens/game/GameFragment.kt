@@ -17,19 +17,27 @@
 package com.example.android.guesstheword.screens.game
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
+import kotlinx.android.synthetic.main.title_fragment.view.*
 
 /**
  * Fragment where the game is played
  */
 class GameFragment : Fragment() {
+
+    //viewModel
+    private lateinit var viewModel: GameViewModel
 
     // The current word
     private var word = ""
@@ -44,6 +52,11 @@ class GameFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+        //calling view model provider
+        // don't use ViewModelProviders {deprecated}
+        Log.i("GameFragment","ViewModelProvider")
+        viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
         // Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(

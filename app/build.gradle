@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
+    def lifecycle_version = "2.2.0"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -58,4 +60,7 @@ dependencies {
     // Navigation
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-rc02"
     implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-rc02"
+
+    //LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 }
