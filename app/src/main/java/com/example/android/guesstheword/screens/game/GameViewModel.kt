@@ -1,6 +1,7 @@
 package com.example.android.guesstheword.screens.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -10,10 +11,21 @@ import androidx.lifecycle.ViewModel
 class GameViewModel() : ViewModel(){
 
     // The current word
-    var word = MutableLiveData<String>()
+    private val _word = MutableLiveData<String>()
+    val word : LiveData<String>
+    get() = _word
 
     // The current score
-    var score = MutableLiveData<Int>()
+    private val _score = MutableLiveData<Int>()
+    val score : LiveData<Int>
+        get() = _score
+    // LiveData cannot be edited and just be viewed
+    // earlier the value of score and word could be changed by any class
+    // so we used a concept called encapsulation which means that we can control who can view and who can edit the values
+    // we made the score and word private and changed their names for use in this class only
+    // and ade a new public variable which cannot edit the variable but pass in its value to other classes
+    // this is done by a kotlin concept called backing field which lets you make changes to the default getters and setters
+    // now in this case the getter is getting the value of score and word and updating to other classes
 
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
@@ -21,7 +33,7 @@ class GameViewModel() : ViewModel(){
     init {
         resetList()
         nextWord()
-        score.value = 0
+        _score.value = 0
     }
 
     /**
@@ -62,14 +74,14 @@ class GameViewModel() : ViewModel(){
         if (wordList.isEmpty()) {
             //gameFinished()
         } else {
-            word.value = wordList.removeAt(0)
+            _word.value = wordList.removeAt(0)
         }
     }
 
     /** Methods for buttons presses **/
 
     fun onSkip() {
-        score.value = (score.value)?.minus(1)
+        _score.value = (score.value)?.minus(1)
         nextWord()
         // we changed the syntax because score is now a liveData object and not an Integer
         // so we need to get its value and make null check, because its null in the starting
@@ -78,7 +90,7 @@ class GameViewModel() : ViewModel(){
     }
 
     fun onCorrect() {
-        score.value = (score.value)?.plus(1)
+        _score.value = (score.value)?.plus(1)
         nextWord()
     }
 }
