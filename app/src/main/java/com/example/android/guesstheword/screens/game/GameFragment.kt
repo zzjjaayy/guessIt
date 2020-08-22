@@ -71,6 +71,8 @@ class GameFragment : Fragment() {
             updateScoreText()
             updateWordText()
         }
+        updateScoreText()
+        updateWordText()
         //moved the onCorrect() and onSkip() to viewModel due to them being the logic part
         // added the updateScoreText() and updateWordText() in both the clickListeners
         // to get the newest data as soon the button is clicked.
