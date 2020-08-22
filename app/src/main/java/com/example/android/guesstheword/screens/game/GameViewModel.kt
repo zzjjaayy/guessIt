@@ -1,5 +1,7 @@
 package com.example.android.guesstheword.screens.game
 
+import android.os.CountDownTimer
+import android.text.format.DateUtils
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +11,14 @@ import androidx.lifecycle.ViewModel
  * ViewModel is used to maintain a layer of separation between UI and data display/update and other minor calculations.
  */
 class GameViewModel() : ViewModel(){
+
+    companion object {
+        private const val DONE = 0L
+        private const val ONE_SECOND = 1000L
+        private const val COUNTDOWN_TIME = 60000L
+    }
+
+    val timer : CountDownTimer
 
     // The current word
     private val _word = MutableLiveData<String>()
@@ -34,11 +44,28 @@ class GameViewModel() : ViewModel(){
     val eventGameFinish : LiveData<Boolean>
         get() = _eventGameFinish
 
+    private val _timeDisplay = MutableLiveData<Long>()
+    val timeDisplay : LiveData<Long>
+        get() = _timeDisplay
+
     init {
         _eventGameFinish.value = false
         resetList()
         nextWord()
         _score.value = 0
+
+        timer = object : CountDownTimer(COUNTDOWN_TIME, ONE_SECOND) {
+            override fun onFinish() {
+                // what happens when timer is finished
+                _timeDisplay.value = DONE
+                _eventGameFinish.value = true
+            }
+            override fun onTick(milliSeconds: Long) {
+                // what happens at each interval
+                _timeDisplay.value = milliSeconds
+            }
+        }
+        timer.start()
     }
 
     /**
@@ -77,11 +104,11 @@ class GameViewModel() : ViewModel(){
     private fun nextWord() {
         //Select and remove a word from the list
         if (wordList.isEmpty()) {
-            //gameFinished()
-            _eventGameFinish.value = true
-        } else {
-            _word.value = wordList.removeAt(0)
+            resetList()
+            // now game won't end when the words are over but when the timer finishes
         }
+        _word.value = wordList.removeAt(0)
+
     }
 
     /** Methods for buttons presses **/
@@ -102,5 +129,10 @@ class GameViewModel() : ViewModel(){
 
     fun onGameFinishedComplete() {
         _eventGameFinish.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        timer.cancel()
     }
 }
