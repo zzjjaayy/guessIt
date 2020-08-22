@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -63,19 +64,21 @@ class GameFragment : Fragment() {
 
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
-            updateScoreText()
-            updateWordText()
+            // we don't need to call updateScoreText and updateWordText because the observe method will be called every time  the score changes
         }
         binding.skipButton.setOnClickListener {
             viewModel.onSkip()
-            updateScoreText()
-            updateWordText()
         }
-        updateScoreText()
-        updateWordText()
-        //moved the onCorrect() and onSkip() to viewModel due to them being the logic part
-        // added the updateScoreText() and updateWordText() in both the clickListeners
-        // to get the newest data as soon the button is clicked.
+
+        viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
+            binding.scoreText.text = newScore.toString()
+        })
+        // passed in the lifecycle of the views in the activity{that is the fragment}
+        // this method will be called every time the value of score changes
+
+        viewModel.word.observe(viewLifecycleOwner, Observer { newWord ->
+            binding.wordText.text = newWord
+        })
 
         return binding.root
 
@@ -87,20 +90,9 @@ class GameFragment : Fragment() {
      * Called when the game is finished
      */
     private fun gameFinished() {
-        val action = GameFragmentDirections.actionGameToScore(viewModel.score)
+        val action = GameFragmentDirections.actionGameToScore(viewModel.score.value ?:0 )
+        // this is an elvis operator which says that if the value is null put in 0
         findNavController(this).navigate(action)
     } // referenced the score variable from viewModel
 
-
-    /** Methods for updating the UI **/
-
-    private fun updateWordText() {
-        binding.wordText.text = viewModel.word
-        // referenced the word variable from viewModel
-    }
-
-    private fun updateScoreText() {
-        binding.scoreText.text = viewModel.score.toString()
-        // referenced the score variable from viewModel
-    }
 }
