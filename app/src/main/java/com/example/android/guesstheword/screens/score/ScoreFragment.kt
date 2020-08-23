@@ -61,10 +61,8 @@ class ScoreFragment : Fragment() {
         // this will then provide a new ScoreViewModel
 
         binding.scoreViewModel = viewModel
-
-        viewModel.scorePassed.observe(viewLifecycleOwner, Observer { newScore ->
-            binding.scoreText.text = newScore.toString()
-        })
+        binding.lifecycleOwner = viewLifecycleOwner
+        // inform the binding about the lifeCycleOwner so that LiveData can be used.
 
         viewModel.playAgain.observe(viewLifecycleOwner, Observer { playAgain ->
             if(playAgain) {

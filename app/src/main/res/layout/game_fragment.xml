@@ -56,6 +56,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/black_text_color"
             android:textSize="34sp"
+            android:text="@{@string/quote_format(gameViewModel.word)}"
             android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/score_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -90,6 +91,7 @@
             android:fontFamily="sans-serif"
             android:textColor="@color/grey_text_color"
             android:textSize="14sp"
+            android:text="@{@string/score_format(gameViewModel.score)}"
             android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
@@ -110,10 +112,6 @@
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline" />
-        <!--The onClick attribute directly from xml can call the viewModel function -->
-        <!--This only works after the binding is informed about the viewModel in Activity-->
-        <!--This type of lambda function is called data binding expression -->
-        <!--Now there is no need to use a onClickListener, they can be removed -->
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

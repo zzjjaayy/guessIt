@@ -60,23 +60,15 @@ class GameFragment : Fragment() {
                 container,
                 false
         )
-        
+
         binding.gameViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         // letting the binding know about the viewModel
         // make sure use the binding after initialising it
 
         /**
          * the onClickListeners are substituted by data binding expression in the XML file
          */
-        viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
-            binding.scoreText.text = newScore.toString()
-        })
-        // passed in the lifecycle of the views in the activity{that is the fragment}
-        // this method will be called every time the value of score changes
-
-        viewModel.word.observe(viewLifecycleOwner, Observer { newWord ->
-            binding.wordText.text = newWord
-        })
 
         viewModel.eventGameFinish.observe(viewLifecycleOwner, Observer { hasFinished ->
             if(hasFinished == true){
