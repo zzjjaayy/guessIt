@@ -3,8 +3,10 @@ package com.example.android.guesstheword.screens.game
 import android.os.CountDownTimer
 import android.text.format.DateUtils
 import android.util.Log
+import android.util.TimeUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 /**
@@ -47,6 +49,12 @@ class GameViewModel() : ViewModel(){
     private val _timeDisplay = MutableLiveData<Long>()
     val timeDisplay : LiveData<Long>
         get() = _timeDisplay
+
+    val timeDisplayString = Transformations.map(timeDisplay, {time ->
+        DateUtils.formatElapsedTime(time)
+    })
+    // used a new variable to transform the LiveData time to formatted time and then this variable
+    // is referred by the XML data binding expression.
 
     init {
         _eventGameFinish.value = false
