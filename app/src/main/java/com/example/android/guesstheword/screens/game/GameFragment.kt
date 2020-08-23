@@ -60,18 +60,14 @@ class GameFragment : Fragment() {
                 container,
                 false
         )
+        
+        binding.gameViewModel = viewModel
+        // letting the binding know about the viewModel
+        // make sure use the binding after initialising it
 
-        // Moved the nextWord() and resetList() to the viewModel so that it gets executed only once
-        // i.e in the starting of the game, so that it isn't affected by configuration changes
-
-        binding.correctButton.setOnClickListener {
-            viewModel.onCorrect()
-            // we don't need to call updateScoreText and updateWordText because the observe method will be called every time  the score changes
-        }
-        binding.skipButton.setOnClickListener {
-            viewModel.onSkip()
-        }
-
+        /**
+         * the onClickListeners are substituted by data binding expression in the XML file
+         */
         viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
         })

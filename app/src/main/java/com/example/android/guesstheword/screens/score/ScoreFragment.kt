@@ -60,11 +60,11 @@ class ScoreFragment : Fragment() {
         // the above line is to get that new instance of ScoreViewModel from the factory
         // this will then provide a new ScoreViewModel
 
+        binding.scoreViewModel = viewModel
+
         viewModel.scorePassed.observe(viewLifecycleOwner, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
         })
-
-        binding.playAgainButton.setOnClickListener { viewModel.onPlayAgain() }
 
         viewModel.playAgain.observe(viewLifecycleOwner, Observer { playAgain ->
             if(playAgain) {
